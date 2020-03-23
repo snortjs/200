@@ -20,15 +20,10 @@ app.get('/posts', (req, res) => {
     }
     
     if (query._any) {
-        let pretraga=query._any
-        let pojmovi=pretraga.split(" ")
-
-        posts=posts.filter(post=>{
-            let podaci=post.title + post.createdBy
-            let rezultat=pojmovi.every(pojam=>{
-                return podaci.indexOf(pojam)>=0
-            })
-            return rezultat
+        let terms = query._any.split(" ")
+        posts = posts.filter(doc => {
+            let info = doc.title + " " + doc.createdBy
+            return terms.every(term => info.indexOf(term) >= 0)
         })
     }
 
