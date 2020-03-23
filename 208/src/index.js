@@ -16,13 +16,13 @@ let lista = [
     }
    ]
 app.get('/', (req,res)=>{
-    let rj=lista.reduce((s,e) => {
+    let a=lista.reduce((s,e) => {
         console.log(e+" -> "+s)
         if(e.id>s) {
             s=e.id;
             return s;
         }
       },0);
-      res.send(`${rj}`);
+      res.send(`${a}`);
 })
 app.listen(port, ()=> console.log(`Slušam na portu ${port}`))
