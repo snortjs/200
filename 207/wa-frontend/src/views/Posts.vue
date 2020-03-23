@@ -17,13 +17,10 @@ export default {
     return {
       store,
       cards: [],
-      term:''
     }
   },
   watch: {
-    "store.searchTerm": _.debounce(function(val) {
-      this.term=val;
-      this.fetchPosts(val)}, 500)
+    "store.searchTerm": _.debounce(function(val) {this.fetchPosts(val)}, 500)
     //"store.searchTerm": function(val) {this.fetchPosts(val)}
   },
   created() {
@@ -33,14 +30,7 @@ export default {
   methods: {
     fetchPosts(term) {
       term = term || store.searchTerm
-      let pozicija=this.term.split(" ")
-      let a=pozicija[0];
-      let b=pozicija[1];
-      if(!a && !b){
-        a="";
-        b="";
-      }
-      fetch(`http://localhost:3000/posts?title=${a}&createdBy=${b}`)
+      fetch(`http://localhost:3000/posts?_any=${term}`)
         .then(response => {
           return response.json()
         })
