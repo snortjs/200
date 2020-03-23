@@ -7,7 +7,7 @@ let studenti = [
     {oib: "97283742342", ime: "Stjepan", prezime: "Stjepanović"},
    ]
 app.get('/', (req,res)=>{
-    let rezultat=studenti.reduce((s,e)=>s+e.ime.length,0)
+    let rezultat=studenti.reduce((s,e)=>s+e.ime.length,0) //mora krenut od 0 da ne pokupi garbage
 console.log(rezultat)
 res.send(`${rezultat}`)
 })
