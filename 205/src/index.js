@@ -5,7 +5,9 @@ let a1 = ["aa", "b1", "b1", "ce", "aa", "ce", "b1", "z"]
 app.get('/', (req,res)=>{
     let brojac = a1.reduce((s,e) =>{
         console.log(s[e])
-        if(s[e]) s[e]++;
+        if(s[e]){
+            s[e]++;
+        }
         else s[e]=1;
         return s;
     },{});
