@@ -1,45 +1,47 @@
 <template>
   <div v-if="store.authenticated">
     <button @click="newImage()" type="Novi post" class="btn btn-primary ml-2">Post new image</button>
-    <div @click="gotoDetails(card)" :key="card.id" v-for="card in cards">
-      <InstagramCard :info="card"/>
+    <div @click="gotoDetails(post)" :key="post.id" v-for="post in posts">
+      <InstagramCard :info="post"/>
     </div>
   </div>
 </template>
 
 <script>
-import _ from 'lodash'
 import InstagramCard from "@/components/InstagramCard.vue";
 import store from "@/store.js";
+import _ from 'lodash'
 
 export default {
   data() {
-    return {
+    return{
       store,
-      cards: [],
+      posts:[],
+      term:''
     }
   },
-  watch: {
-    "store.searchTerm": _.debounce(function(val) {this.fetchPosts(val)}, 500)
-    //"store.searchTerm": function(val) {this.fetchPosts(val)}
-  },
-  created() {
-    this.fetchPosts()
-  },
+  
   name: "posts",
+  mounted(){
+    this.fetchPosts();
+  },
   methods: {
-    fetchPosts(term) {
-      term = term || store.searchTerm
-      fetch(`http://localhost:3000/posts?_any=${term}`)
-        .then(response => {
-          return response.json()
-        })
-        .then(data => {
-          console.log("Podaci s backenda", data)
-          this.cards = data.map(doc => {
-            return {id: doc.id, url: doc.source, email: doc.createdBy, title: doc.title, posted_at: Number(doc.postedAt)}
-          })
-        })
+    fetchPosts(){
+    fetch(`http://localhost:3000/posts?_any=${this.store.searchTerm}`)
+    .then(data=>{
+      return data.json()
+    })
+    .then(owo=>{
+      this.posts=owo.map(doc=>{
+        return{
+          id:doc.id,
+          email:doc.createdBy,
+          postedat:Number(doc.postedAt),
+          url:doc.source,
+          title:doc.title
+        }
+      })
+    })
     },
     gotoDetails(card) {
       this.$router.push({path: `post/${card.id}`})
@@ -51,6 +53,11 @@ export default {
   components: {
     InstagramCard
   },
+  watch:{
+    "store.searchTerm": _.debounce(function(){
+        this.fetchPosts();
+    },500)
+  }
 }
 </script>
 
